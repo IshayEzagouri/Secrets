@@ -60,8 +60,20 @@ app.get("/submit", function (req, res) {
   }
 });
 
-app.get("/secrets", (req, res) => {
-  res.render("secrets.ejs");
+app.get("/secrets", async (req, res) => {
+  try {
+    const result = await db.query(`
+      SELECT *
+      FROM users
+      WHERE secret IS NOT NULL AND secret <> '';
+    `);
+
+    const secrets = result.rows;
+    res.render("secrets.ejs", { secrets });
+  } catch (err) {
+    console.error("Error fetching secrets:", err);
+    res.status(500).send("An error occurred while fetching secrets.");
+  }
 });
 
 app.post("/submit", async (req, res) => {

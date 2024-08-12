@@ -1,7 +1,4 @@
-import express from "express";
 import bcrypt from "bcrypt";
-import db from "../db.js"; //
-import passport from "passport";
 export async function hashPasswordMiddleware(req, res, next) {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
